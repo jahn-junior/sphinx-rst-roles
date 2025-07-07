@@ -18,7 +18,8 @@
 
 from sphinx.util.typing import ExtensionMetadata
 from sphinx.application import Sphinx
-from .hello import HelloDirective
+from .roles import SpellExceptionRole, NoneRole, LiteralrefRole
+
 
 try:
     from ._version import __version__
@@ -26,7 +27,7 @@ except ImportError:  # pragma: no cover
     from importlib.metadata import version, PackageNotFoundError
 
     try:
-        __version__ = version("hello_ext")
+        __version__ = version("rst_roles")
     except PackageNotFoundError:
         __version__ = "dev"
 
@@ -36,7 +37,9 @@ def setup(app: Sphinx) -> ExtensionMetadata:
 
     :returns: ExtensionMetadata
     """
-    app.add_directive("hello", HelloDirective)
+    app.add_role("spellexception", SpellExceptionRole())
+    app.add_role("literalref", LiteralrefRole())
+    app.add_role("none", NoneRole())
 
     return {
         "version": __version__,

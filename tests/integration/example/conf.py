@@ -26,5 +26,5 @@ author = "Tester"
 html_title = project
 
 extensions = [
-    "hello_ext",
+    "rst_roles",
 ]
