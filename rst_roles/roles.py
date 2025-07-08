@@ -46,9 +46,10 @@ class LiteralrefRole(ReferenceRole):
         """Create a cross-reference with monospaced text."""
         node: nodes.reference | addnodes.pending_xref
 
+        # Create an external reference
         if self.target.startswith("http://") or self.target.startswith("https://"):
             node = nodes.reference("", "", internal=False, refuri=self.target)
-        else:
+        else:  # Create an internal reference
             node = addnodes.pending_xref(
                 "",
                 refdomain="std",

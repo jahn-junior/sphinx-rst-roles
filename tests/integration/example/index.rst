@@ -1,3 +1,4 @@
+.. _label:
 
 Test doc
 ========
@@ -6,4 +7,6 @@ Test doc
 
 :none:`This does nothing!`
 
-:literalref:`wow <https://github.com/jahn-junior/sphinx-rst-roles>`
+:literalref:`external link <https://github.com/jahn-junior/sphinx-rst-roles>`
+
+:literalref:`internal link <label>`
