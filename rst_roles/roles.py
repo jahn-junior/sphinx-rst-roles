@@ -16,6 +16,7 @@
 """Contains the extension's roles."""
 
 from docutils import nodes
+from sphinx import addnodes
 from sphinx.util.docutils import ReferenceRole, SphinxRole
 
 
@@ -43,7 +44,19 @@ class LiteralrefRole(ReferenceRole):
 
     def run(self) -> tuple[list[nodes.Node], list[nodes.system_message]]:
         """Create a cross-reference with monospaced text."""
-        node = nodes.reference("", "", internal=False, refuri=self.target)
+        node: nodes.reference | addnodes.pending_xref
+
+        if self.target.startswith("http://") or self.target.startswith("https://"):
+            node = nodes.reference("", "", internal=False, refuri=self.target)
+        else:
+            node = addnodes.pending_xref(
+                "",
+                refdomain="std",
+                reftype="ref",
+                reftarget=self.target,
+            )
+            node["refexplicit"] = True
+
         node.append(nodes.literal(text=self.title))
 
         return [node], []
