@@ -15,10 +15,8 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 """Contains the extension's roles."""
 
-import re
-
 from docutils import nodes
-from sphinx.util.docutils import SphinxRole
+from sphinx.util.docutils import ReferenceRole, SphinxRole
 
 
 class SpellExceptionRole(SphinxRole):
@@ -40,21 +38,12 @@ class NoneRole(SphinxRole):
         return [], []
 
 
-class LiteralrefRole(SphinxRole):
+class LiteralrefRole(ReferenceRole):
     """Define the literalref role's behavior."""
 
     def run(self) -> tuple[list[nodes.Node], list[nodes.system_message]]:
         """Create a cross-reference with monospaced text."""
-        find_url = re.compile(r"^(.+?)\s*<(.+)>$")
-        match = find_url.match(self.text)
-
-        link_text = match.groups()[0] if match else self.text
-        link_url = match.groups()[1] if match else self.text
-
-        if "://" not in link_url:
-            link_url = "https://" + link_url
-
-        node = nodes.reference("", "", internal=False, refuri=link_url)
-        node.append(nodes.literal(text=link_text))
+        node = nodes.reference("", "", internal=False, refuri=self.target)
+        node.append(nodes.literal(text=self.title))
 
         return [node], []
