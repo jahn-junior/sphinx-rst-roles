@@ -52,12 +52,14 @@ class LiteralrefRole(ReferenceRole):
         else:  # Create an internal reference
             node = addnodes.pending_xref(
                 "",
-                refdomain="std",
+                refdomain="lrd",  # use custom domain
                 reftype="ref",
                 reftarget=self.target,
+                refexplicit=True,
+                refwarning=True,
             )
-            node["refexplicit"] = True
 
+        #  append the link text
         node.append(nodes.literal(text=self.title))
 
         return [node], []

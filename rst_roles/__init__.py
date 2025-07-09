@@ -13,11 +13,11 @@
 #
 # You should have received a copy of the GNU Lesser General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
-
-"""Adds the directive to Sphinx."""
+"""Adds the extension's roles to Sphinx."""
 
 from sphinx.util.typing import ExtensionMetadata
 from sphinx.application import Sphinx
+from .domain import LiteralrefDomain
 from .roles import SpellExceptionRole, NoneRole, LiteralrefRole
 
 
@@ -33,10 +33,12 @@ except ImportError:  # pragma: no cover
 
 
 def setup(app: Sphinx) -> ExtensionMetadata:
-    """Add the extension's directive to Sphinx.
+    """Add the extension's roles to Sphinx.
 
     :returns: ExtensionMetadata
     """
+    app.add_domain(LiteralrefDomain)
+
     app.add_role("spellexception", SpellExceptionRole())
     app.add_role("literalref", LiteralrefRole())
     app.add_role("none", NoneRole())
