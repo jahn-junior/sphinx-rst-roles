@@ -15,6 +15,8 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 """Contains the extension's roles."""
 
+import re
+
 from docutils import nodes
 from sphinx import addnodes
 from sphinx.util.docutils import ReferenceRole, SphinxRole
@@ -47,7 +49,10 @@ class LiteralrefRole(ReferenceRole):
         node: nodes.reference | addnodes.pending_xref
 
         # Create an external reference
-        if self.target.startswith("http://") or self.target.startswith("https://"):
+        if re.match(r"^(https?:\/\/\S+|\S+\.\S{2,3}\/?)\b", self.target):
+            self.target = (
+                f"https://{self.target}" if "://" not in self.target else self.target
+            )
             node = nodes.reference("", "", internal=False, refuri=self.target)
         else:  # Create an internal reference
             node = addnodes.pending_xref(
