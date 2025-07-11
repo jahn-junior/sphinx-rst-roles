@@ -46,7 +46,7 @@ def fake_spellexception_role(request: pytest.FixtureRequest) -> FakeSpellExcepti
     # Get any optional overrides from the fixtures
     overrides = request.param if hasattr(request, "param") else {}
 
-    return FakeSpellExceptionRole(text=overrides.get("text", []))
+    return FakeSpellExceptionRole(text=overrides.get("text", ""))
 
 
 @pytest.fixture
@@ -55,7 +55,7 @@ def fake_none_role(request: pytest.FixtureRequest) -> FakeNoneRole:
     # Get any optional overrides from the fixtures
     overrides = request.param if hasattr(request, "param") else {}
 
-    return FakeNoneRole(text=overrides.get("text", []))
+    return FakeNoneRole(text=overrides.get("text", ""))
 
 
 @pytest.fixture
@@ -71,14 +71,28 @@ def fake_literalref_role(request: pytest.FixtureRequest) -> FakeLiteralrefRole:
 
 @pytest.mark.parametrize(
     "fake_none_role",
-    [{"text": ["this does nothing."]}],
+    [{"text": "this does nothing."}],
     indirect=True,
 )
 def test_none_role(fake_none_role: FakeNoneRole):
     expected: tuple[list[nodes.Node], list[nodes.system_message]] = [], []
     actual = fake_none_role.run()
 
-    assert expected == actual
+    assert str(expected) == str(actual)
+
+
+@pytest.mark.parametrize(
+    "fake_spellexception_role",
+    [{"text": "wow."}],
+    indirect=True,
+)
+def test_spellexception_role(fake_spellexception_role: FakeSpellExceptionRole):
+    node = nodes.raw(text="<spellexception>wow.</spellexception>", format="html")
+    expected: tuple[list[nodes.Node], list[nodes.system_message]] = [node], []
+
+    actual = fake_spellexception_role.run()
+
+    assert str(expected) == str(actual)
 
 
 @pytest.mark.parametrize(
