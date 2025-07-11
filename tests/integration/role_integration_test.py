@@ -42,4 +42,5 @@ def test_hello_integration(example_project):
 
     index = build_dir / "index.html"
     soup = bs4.BeautifulSoup(index.read_text(), features="lxml")
+
     shutil.rmtree(example_project)

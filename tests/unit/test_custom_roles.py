@@ -17,6 +17,7 @@
 import pytest
 from docutils import nodes
 from rst_roles.roles import LiteralrefRole, NoneRole, SpellExceptionRole
+from sphinx import addnodes
 from typing_extensions import override
 
 
@@ -34,8 +35,9 @@ class FakeNoneRole(NoneRole):
 
 class FakeLiteralrefRole(LiteralrefRole):
     @override
-    def __init__(self, text):
-        self.text = text
+    def __init__(self, title, target):
+        self.title = title
+        self.target = target
 
 
 @pytest.fixture
@@ -62,7 +64,9 @@ def fake_literalref_role(request: pytest.FixtureRequest) -> FakeLiteralrefRole:
     # Get any optional overrides from the fixtures
     overrides = request.param if hasattr(request, "param") else {}
 
-    return FakeLiteralrefRole(text=overrides.get("text", []))
+    return FakeLiteralrefRole(
+        title=overrides.get("title", ""), target=overrides.get("target", "")
+    )
 
 
 @pytest.mark.parametrize(
@@ -75,3 +79,81 @@ def test_none_role(fake_none_role: FakeNoneRole):
     actual = fake_none_role.run()
 
     assert expected == actual
+
+
+@pytest.mark.parametrize(
+    "fake_literalref_role",
+    [{"title": "link text", "target": "label"}],
+    indirect=True,
+)
+def test_literalref_internal(fake_literalref_role: FakeLiteralrefRole):
+    return_nodes: list[nodes.Node] = []
+    ref_node = addnodes.pending_xref(
+        "",
+        refdomain="lrd",
+        reftype="ref",
+        reftarget="label",
+        refexplicit=True,
+        refwarning=True,
+    )
+    ref_node.append(nodes.literal(text="link text"))
+    return_nodes.append(ref_node)
+    expected: tuple[list[nodes.Node], list[nodes.system_message]] = return_nodes, []
+
+    actual = fake_literalref_role.run()
+
+    assert str(expected) == str(actual)
+
+
+@pytest.mark.parametrize(
+    "fake_literalref_role",
+    [
+        {
+            "title": "link text",
+            "target": "https://github.com/jahn-junior/sphinx-rst-roles",
+        }
+    ],
+    indirect=True,
+)
+def test_literalref_external(fake_literalref_role: FakeLiteralrefRole):
+    return_nodes: list[nodes.Node] = []
+    ref_node = nodes.reference(
+        "",
+        "",
+        internal=False,
+        refuri="https://github.com/jahn-junior/sphinx-rst-roles",
+    )
+    ref_node.append(nodes.literal(text="link text"))
+    return_nodes.append(ref_node)
+    expected: tuple[list[nodes.Node], list[nodes.system_message]] = return_nodes, []
+
+    actual = fake_literalref_role.run()
+
+    assert str(expected) == str(actual)
+
+
+@pytest.mark.parametrize(
+    "fake_literalref_role",
+    [
+        {
+            "title": "link text",
+            "target": "https://github.com/jahn-junior/sphinx-rst-roles",
+        }
+    ],
+    indirect=True,
+)
+def test_literalref_external_no_prefix(fake_literalref_role: FakeLiteralrefRole):
+    return_nodes: list[nodes.Node] = []
+    ref_node = nodes.reference(
+        "",
+        "",
+        internal=False,
+        refuri="github.com/jahn-junior/sphinx-rst-roles",
+    )
+    ref_node.append(nodes.literal(text="link text"))
+    return_nodes.append(ref_node)
+    expected: tuple[list[nodes.Node], list[nodes.system_message]] = return_nodes, []
+
+    actual = fake_literalref_role.run()
+
+    assert str(expected) == str(actual)
