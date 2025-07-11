@@ -1,4 +1,4 @@
-.. _label:
+.. _rst-label:
 
 Test doc
 ========
@@ -9,4 +9,14 @@ Test doc
 
 :literalref:`external link <https://github.com/jahn-junior/sphinx-rst-roles>`
 
-:literalref:`internal link <label>`
+:literalref:`internal same page <rst-label>`
+
+:literalref:`internal other page <other-file>`
+
+:literalref:`rST to MyST <myst-label>`
+
+.. toctree::
+    :hidden:
+
+    other-file
+    myst-file

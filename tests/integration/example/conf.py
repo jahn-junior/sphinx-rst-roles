@@ -26,5 +26,6 @@ author = "Tester"
 html_title = project
 
 extensions = [
+    "myst_parser",
     "rst_roles",
 ]
