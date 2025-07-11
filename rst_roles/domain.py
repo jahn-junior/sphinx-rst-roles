@@ -47,6 +47,9 @@ class LiteralrefDomain(StandardDomain):
         disregards the type of the pending node's children and places their
         contents into an inline node.
         """
+        if node.get("refdomain") != "lrd":
+            return None
+
         resolved_node = super().resolve_xref(
             env, fromdocname, builder, typ, target, node, contnode
         )  # resolve the reference using the standard domain
