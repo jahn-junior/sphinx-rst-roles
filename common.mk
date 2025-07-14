@@ -49,14 +49,6 @@ help: ## Show this help.
 setup: install-uv setup-precommit install-build-deps ## Set up a development environment
 	uv sync $(UV_TEST_GROUPS) $(UV_LINT_GROUPS)
 
-.PHONY: setup-tests
-setup-tests: install-uv install-build-deps ##- Set up a testing environment without linters
-	uv sync $(UV_TEST_GROUPS)
-
-.PHONY: setup-lint
-setup-lint: install-uv install-shellcheck install-pyright install-lint-build-deps  ##- Set up a linting-only environment
-	uv sync $(UV_LINT_GROUPS)
-
 .PHONY: setup-precommit
 setup-precommit: install-uv  ##- Set up pre-commit hooks in this repository.
 ifeq ($(shell which pre-commit),)
@@ -68,7 +60,7 @@ endif
 .PHONY: clean
 clean:  ## Clean up the development environment
 	uv tool run pyclean .
-	rm -rf dist/ build/ *.snap .coverage*
+	rm -rf dist/ build/ .coverage*
 
 .PHONY: autoformat
 autoformat: format  # Hidden alias for 'format'
