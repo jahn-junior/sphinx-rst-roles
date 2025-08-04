@@ -60,7 +60,7 @@ endif
 .PHONY: clean
 clean:  ## Clean up the development environment
 	uv tool run pyclean .
-	rm -rf dist/ build/ .coverage*
+	rm -rf dist/ build/ .test_output/ .coverage*
 
 .PHONY: autoformat
 autoformat: format  # Hidden alias for 'format'

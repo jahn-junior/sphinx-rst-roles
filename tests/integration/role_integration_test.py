@@ -41,6 +41,10 @@ def test_hello_integration(example_project):
     )
 
     index = build_dir / "index.html"
+    # Rename the test output to something more meaningful
+    shutil.copytree(
+        build_dir, build_dir.parents[1] / ".test_output", dirs_exist_ok=True
+    )
     soup = bs4.BeautifulSoup(index.read_text(), features="lxml")
 
-    shutil.rmtree(example_project)
+    shutil.rmtree(example_project)  # Delete copied source
