@@ -1,55 +1,34 @@
 # custom-sphinx-roles
 
-`custom-sphinx-roles` houses all of Canonical's custom Sphinx roles.
-
-lorem ipsum
+`custom-sphinx-roles` houses the `literalref`, `spellexception`, and `none` roles.
 
 ## Basic usage
 
 ### literalref
 
-lorem ipsum
+To add a monospaced reference to your document, pass the target or URL to the
+`literalref` role:
 
 ```
-:literalref:`link text <target>`
+:literalref:`link text <ref-target>`
 
-:literalref:`link text <URL>`
-```
-
-lorem ipsum
-
-```
-{literalref}`link text <target>`
-
-{literalref}`link text <URL>`
+:literalref:`link text <https://example.com>`
 ```
 
 ### spellexception
 
-lorem ipsum
+To exempt a string from spell checking, wrap it in the `spellexception` role:
 
 ```
 :spellexception:`Lorem ipsum`
 ```
 
-lorem ipsum
-
-```
-{spellexception}`Lorem ipsum`
-```
-
 ### none
 
-lorem ipsum
+To prevent a string from being rendered in the document, wrap it in the `none` role:
 
 ```
 :none:`This text isn't rendered.`
-```
-
-lorem ipsum
-
-```
-{none}`This text isn't rendered.`
 ```
 
 ## Project setup
@@ -74,13 +53,11 @@ extensions = [
 You can report any issues or bugs on the project's [GitHub
 repository](https://github.com/jahn-junior/sphinx-rst-roles).
 
-sphinx-rst-roles is covered by the [Ubuntu Code of
+custom-sphinx-roles is covered by the [Ubuntu Code of
 Conduct](https://ubuntu.com/community/ethos/code-of-conduct).
 
 ## License and copyright
 
 custom-sphinx-roles is released under the [GPL-3.0 license](LICENSE).
-
-<!-- FIXME -->
 
 © 2025 Canonical Ltd.
